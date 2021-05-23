@@ -8,6 +8,11 @@ from taskEngine.db import TimestampModel, DescModel, CreateUserModel
 
 class Category(TimestampModel, CreateUserModel):
     name = models.CharField(max_length=32, verbose_name=u'分类名称')
+    display = models.CharField(max_length=64, verbose_name=u'分类名称')
+
+    class Meta:
+        verbose_name = u'任务分类'
+        verbose_name_plural = verbose_name
 
 
 class Task(TimestampModel, DescModel, CreateUserModel):
@@ -16,6 +21,10 @@ class Task(TimestampModel, DescModel, CreateUserModel):
     type = models.CharField(max_length=16, choices=task_type)
     category = models.IntegerField(default=0)
     path = models.CharField(max_length=64, verbose_name=u'路径')
+
+    class Meta:
+        verbose_name = u'任务'
+        verbose_name_plural = verbose_name
 
 
 class TaskInputParams(TimestampModel, CreateUserModel):
@@ -26,13 +35,25 @@ class TaskInputParams(TimestampModel, CreateUserModel):
     desc = models.CharField(max_length=32, blank=True, null=True)
     required = models.BooleanField(default=False)
 
+    class Meta:
+        verbose_name = u'任务参数'
+        verbose_name_plural = verbose_name
+
 
 class TaskConf(TimestampModel, CreateUserModel):
     timeout = models.IntegerField(default=0, verbose_name=u'超时时间')
     exc_user = models.CharField(max_length=32, verbose_name=u'执行用户', default='root')
+
+    class Meta:
+        verbose_name = u'任务配置'
+        verbose_name_plural = verbose_name
 
 
 class TaskLog(TimestampModel, CreateUserModel):
     task_id = models.IntegerField(verbose_name=u'任务ID')
     hosts = models.TextField(null=True, blank=True, verbose_name=u'目标主机')
     params = models.TextField(null=True, blank=True, verbose_name=u'参数')
+
+    class Meta:
+        verbose_name = u'任务日志'
+        verbose_name_plural = verbose_name
