@@ -128,8 +128,6 @@ STATICFILES_DIRS = (
 
 # resources path
 RESOURCE_PATH = os.path.join(BASE_DIR, 'resources')
-TASK_SHELL_PATH = os.path.join(RESOURCE_PATH, 'shells')
-TASK_PLAYBOOK_PATH = os.path.join(RESOURCE_PATH, 'playbooks')
-TASK_ROLE_PATH = os.path.join(RESOURCE_PATH, 'roles')
-TASK_PACKAGE_PATH = os.path.join(RESOURCE_PATH, 'packages')
-TASK_RESOURCE_PATH = [TASK_SHELL_PATH, TASK_PLAYBOOK_PATH]
+TASKS_PATH = os.path.join(RESOURCE_PATH, 'tasks')
+ROLES_PATH = os.path.join(RESOURCE_PATH, 'roles')
+TASK_TYPES = {'sh': 'shell', 'yml': 'playbook'}
