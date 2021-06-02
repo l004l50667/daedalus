@@ -5,7 +5,7 @@ import os
 from django.conf import settings
 
 from daedalus.celery import app
-from jobs.models import Category, Task
+from .models import Category, Task
 
 
 @app.task
@@ -100,7 +100,7 @@ class CategoryTask(object):
             task = Task.objects.filter(name=task_name).filter(category=self.category.id).first()
             if task:
                 continue
-            task = Task(name=task_name, category=self.category.id, path=path)
+            task = Task(name=task_name, category=self.category.id, path=path, type=task_type)
             task.save()
             self.tasks_ids.append(task.id)
 

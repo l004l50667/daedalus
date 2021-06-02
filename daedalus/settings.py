@@ -25,7 +25,7 @@ SECRET_KEY = 'z76d$66+bv!wb-#rd!t(=5u^2@qyb$wz4ip*m(b!imk**b2&a7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,8 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'taskEngine',
+    'djcelery',
     'tasks',
+    'taskEngine',
+    'jobs'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -131,3 +133,19 @@ RESOURCE_PATH = os.path.join(BASE_DIR, 'resources')
 TASKS_PATH = os.path.join(RESOURCE_PATH, 'tasks')
 ROLES_PATH = os.path.join(RESOURCE_PATH, 'roles')
 TASK_TYPES = {'sh': 'shell', 'yml': 'playbook'}
+
+# celery
+import djcelery
+djcelery.setup_loader()
+BROKER_URL = 'redis://opstask.redis:6379'
+#CELERY_RESULT_BACKEND = 'redis://opstask.redis:6379/1'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_RESULT_EXPIRES = 3600
+CONSTANCE_BACKEND = 'constance.backends.redisd.RedisBackend'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Shanghai'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+
+import djcelery
+djcelery.setup_loader()
