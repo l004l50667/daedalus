@@ -2,16 +2,17 @@
 
 from django.db.models import Q
 from django.conf import settings
+from django.shortcuts import get_object_or_404
 
-from .models import Task, Category
-from ddutils.views import DDListView
+from .models import Task, Category, TaskLog, TaskConf, TaskInputParams
+from ddutils.views import DDListView, DDDetailView
 
 
 class TaskListView(DDListView):
     model = Task
     queryset = Task.objects.all()
     template_name = "jobs/task_list.html"
-    serializer_fields = ('name', 'type', 'category')
+    serializer_fields = ('name', 'type', 'category', 'id')
 
     def get_context_data(self, request, *args, **kwargs):
         categories = [category for category in Category.objects.all()]
@@ -49,5 +50,27 @@ class TaskListView(DDListView):
         return queryset.all()
 
 
-class CategoryListView(DDListView):
-    model = Category
+class TaskDetailView(DDDetailView):
+    model = Task
+    template_name = "jobs/task_detail.html"
+
+
+class TaskEditView(DDDetailView):
+    model = Task
+    template_name = "jobs/task_edit.html"
+
+    def get_context_data(self, request, pk):
+        task_conf = TaskConf.objects.filter(task_id=pk).first()
+        if not task_conf:
+            task_conf = TaskConf(task_id=pk)
+            task_conf.save()
+        return {'conf': task_conf}
+
+
+class TaskLogListView(DDListView):
+    model = TaskLog
+    queryset = TaskLog.objects.all()
+
+    def get_queryset(self, request):
+        task_id = request.GET.get('task_id', 0)
+        return self.queryset.filter(task_id=task_id).all()

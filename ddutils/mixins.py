@@ -15,4 +15,19 @@ class LoginRequiredMixin(object):
         return super(LoginRequiredMixin, self).dispatch(request,*args, **kwargs)
 
 
+class MessageMixin(object):
 
+    def get_messages(self):
+        return {}
+
+
+class SerializerMixin(object):
+
+    serializer_fields = ()
+
+    def searializer_data(self, pagination):
+        pagination['result'] = [
+            { field: getattr(obj, field) for field in self.serializer_fields}
+            for obj in pagination['result']
+        ]
+        return pagination

@@ -19,7 +19,7 @@ class DescModel(models.Model):
 
 
 class CreateUserModel(models.Model):
-    create_user = models.CharField(max_length=32, verbose_name=u'创建人')
+    create_user = models.CharField(max_length=32, verbose_name=u'创建人', null=True, blank=True)
 
     class Meta:
         abstract = True

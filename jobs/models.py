@@ -20,11 +20,15 @@ class Task(TimestampModel, DescModel, CreateUserModel):
     task_type = (('shell', 'shell'), ('playbook', 'playbook'))
     type = models.CharField(max_length=16, choices=task_type)
     category = models.IntegerField(default=0)
-    path = models.CharField(max_length=64, verbose_name=u'路径')
+    path = models.CharField(max_length=128, verbose_name=u'路径')
 
     class Meta:
         verbose_name = u'任务'
         verbose_name_plural = verbose_name
+
+    @property
+    def category_name(self):
+        return Category.objects.get(pk=self.category).display
 
 
 class TaskInputParams(TimestampModel, CreateUserModel):
@@ -41,8 +45,11 @@ class TaskInputParams(TimestampModel, CreateUserModel):
 
 
 class TaskConf(TimestampModel, CreateUserModel):
-    timeout = models.IntegerField(default=0, verbose_name=u'超时时间')
-    exc_user = models.CharField(max_length=32, verbose_name=u'执行用户', default='root')
+    task_id = models.IntegerField()
+    timeout = models.IntegerField(default=120, verbose_name=u'超时时间')
+    default_user = models.CharField(max_length=32, verbose_name=u'执行用户', default='root')
+    user_action = models.CharField(max_length=32, verbose_name=u'执行用户选择', choices=(('allow', 'allow'), ('deny', 'deny')))
+    user_list = models.TextField(null=True, blank=True)
 
     class Meta:
         verbose_name = u'任务配置'
